@@ -5,18 +5,18 @@ apply plugin: 'jacoco'
 
 jacoco {
 	toolVersion = "0.8.1"
+	reportsDir = file("$buildDir/../../report")
 }
 
 tasks.withType(Test) {
 	jacoco.includeNoLocationClasses = true
 }
 
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+task customTestReport(type: JacocoReport, dependsOn: [':core:test', 'testDebugUnitTest', 'createDebugCoverageReport']) {
 	group = "Reporting"
 	description = "Generate Jacoco coverage reports for Debug build"
 	
 	reports {
-		xml.enabled = true
 		html.enabled = true
 	}
 	
@@ -38,15 +38,21 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
 	) + fileTree(
 		dir: "$buildDir/tmp/kotlin-classes/debug",
 		excludes: excludes
+	) + fileTree(
+		dir: "$buildDir/../../core/build/classes",
+		excludes: excludes
 	)
-	
+
 	// sources
 	sourceDirectories = files([
 		android.sourceSets.main.java.srcDirs,
-		"src/main/kotlin"
+		"src/main/kotlin",
+		"../core/src/main"
 	])
 	executionData = fileTree(dir: project.buildDir, includes: [
-		'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
+		'jacoco/testDebugUnitTest.exec',
+		'outputs/code-coverage/connected/*coverage.ec',
+		'../../core/build/jacoco/*.ec',
 	])
 }
 
@@ -71,15 +77,6 @@ android {
         }
     }
 	
-	testOptions {
-		execution 'ANDROID_TEST_ORCHESTRATOR'
-		animationsDisabled true
-		
-		unitTests {
-			includeAndroidResources = true
-		}
-	}
-	
 }
 
 dependencies {
@@ -92,5 +89,4 @@ dependencies {
 	androidTestImplementation 'com.android.support.test:rules:1.0.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-	androidTestUtil 'com.android.support.test:orchestrator:1.0.2'
 }
