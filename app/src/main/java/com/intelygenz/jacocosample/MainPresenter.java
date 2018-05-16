@@ -1,6 +1,6 @@
 package com.intelygenz.jacocosample;
 
-import com.intelygenz.core.Core;
+import com.intelygenz.jacocosample.core.Core;
 
 public class MainPresenter {
 	

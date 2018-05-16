@@ -1,63 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'jacoco'
 apply from: 'build_testing.gradle'
-
-jacoco {
-	toolVersion = "0.8.1"
-}
-
-tasks.withType(Test) {
-	jacoco.includeNoLocationClasses = true
-}
-
-task customTestReport(type: JacocoReport, dependsOn: [':core:test', 'testDebugUnitTest', 'createDebugCoverageReport']) {
-	group = "Reporting"
-	description = "Generate Jacoco coverage reports for Debug build"
-	
-	reports {
-		xml.enabled false
-		csv.enabled false
-		html.enabled = true
-		html.destination file("${buildDir}/../../report")
-	}
-	
-	// what to exclude from coverage report
-	// UI, "noise", generated classes, platform classes, etc.
-	def excludes = [
-		'**/R.class',
-		'**/R$*.class',
-		'**/*$ViewInjector*.*',
-		'**/BuildConfig.*',
-		'**/Manifest*.*',
-		'**/*Test*.*',
-		'android/**/*.*'
-	]
-	// generated classes
-	classDirectories = fileTree(
-		dir: "$buildDir/intermediates/classes/debug",
-		excludes: excludes
-	) + fileTree(
-		dir: "$buildDir/tmp/kotlin-classes/debug",
-		excludes: excludes
-	) + fileTree(
-		dir: "$buildDir/../../core/build/classes",
-		excludes: excludes
-	)
-
-	// sources
-	sourceDirectories = files([
-		android.sourceSets.main.java.srcDirs,
-		"src/main/kotlin",
-		"../core/src/main"
-	])
-	executionData = fileTree(dir: project.buildDir, includes: [
-		'jacoco/testDebugUnitTest.exec',
-		'outputs/code-coverage/connected/*coverage.ec',
-		'../../core/build/jacoco/*.ec',
-	])
-}
+apply from: 'code_coverage.gradle'
 
 android {
     compileSdkVersion 27
