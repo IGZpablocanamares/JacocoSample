@@ -19,7 +19,10 @@ allprojects {
     repositories {
         google()
         jcenter()
-    }
+		maven {
+			url 'http://nexus.intelygenz.com/content/repositories/releases'
+		}
+	}
 }
 
 task clean(type: Delete) {

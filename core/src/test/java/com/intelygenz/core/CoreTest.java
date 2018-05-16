@@ -7,7 +7,7 @@ public class CoreTest {
 	@Test
 	public void doStuff() {
 		Core core = new Core();
-		core.doStuff();
+		core.doCoreStuff();
 	}
 	
 }

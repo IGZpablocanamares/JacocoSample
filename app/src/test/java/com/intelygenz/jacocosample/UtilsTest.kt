@@ -2,12 +2,12 @@ package com.intelygenz.jacocosample
 
 import org.junit.Test
 
-class ExampleUnitTest {
+class UtilsTest {
 
     @Test
     fun addition_isCorrect() {
-        val presenter = MainPresenter()
-        presenter.doStuff()
+        val utils = Utils()
+        utils.doUtilsStuff()
     }
     
 }

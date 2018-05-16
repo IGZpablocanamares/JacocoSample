@@ -6,9 +6,9 @@ public class MainPresenter {
 	
 	private Core core = new Core();
 	
-	public void doStuff() {
-		System.out.println("DoStuff");
-		core.doStuff();
+	public void doPresenterStuff() {
+		System.out.println("doPresenterStuff");
+		core.doCoreStuff();
 	}
 	
 }
