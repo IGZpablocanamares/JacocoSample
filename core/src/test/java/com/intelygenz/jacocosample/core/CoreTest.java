@@ -10,4 +10,10 @@ public class CoreTest {
 		core.doCoreStuff();
 	}
 	
+	@Test
+	public void doAnotherCoreStuff() {
+		Core core = new Core();
+		core.doAnotherStuff();
+	}
+
 }

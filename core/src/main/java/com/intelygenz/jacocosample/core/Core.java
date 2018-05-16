@@ -6,4 +6,8 @@ public class Core {
 		System.out.println("doCoreStuff");
 	}
 	
+	public void doAnotherStuff() {
+		System.out.println("doAnotherStuff");
+	}
+	
 }
