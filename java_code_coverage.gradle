@@ -1,0 +1,17 @@
+apply plugin: 'jacoco'
+
+jacoco {
+	toolVersion = "0.8.1"
+}
+
+jacocoTestReport {
+	reports {
+		xml.enabled false
+		csv.enabled false
+		html.enabled true
+	}
+}
+
+task codeCoverage(dependsOn: ["test", "jacocoTestReport"]) {
+	group = "Reporting"
+}

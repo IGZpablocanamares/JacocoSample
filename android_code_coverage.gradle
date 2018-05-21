@@ -1,0 +1,38 @@
+apply plugin: 'jacoco'
+
+jacoco {
+	toolVersion = "0.8.1"
+}
+
+tasks.withType(Test) {
+	jacoco.includeNoLocationClasses = true
+}
+
+task codeCoverage(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'connectedDebugAndroidTest']){
+	group = "Reporting"
+	
+	reports {
+		xml.enabled = true
+		html.enabled = true
+	}
+	def excludes = [
+		'**/R.class',
+		'**/R$*.class',
+		'**/*$ViewInjector*.*',
+		'**/BuildConfig.*',
+		'**/Manifest*.*',
+		'**/*Test*.*',
+		'android/**/*.*'
+	]
+	classDirectories = fileTree(
+		dir: "${buildDir}/intermediates/classes/debug",
+		excludes: excludes
+	) + fileTree(
+		dir: "${buildDir}/tmp/kotlin-classes/debug",
+		excludes: excludes
+	)
+	// sources
+	sourceDirectories = files([android.sourceSets.main.java.srcDirs])
+	executionData = fileTree(dir: buildDir, includes: ['**/*.exec', '**/*.ec'])
+	
+}

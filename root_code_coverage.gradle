@@ -1,4 +1,3 @@
-apply plugin: 'com.android.application'
 apply plugin: 'jacoco'
 
 jacoco {
@@ -9,11 +8,10 @@ tasks.withType(Test) {
 	jacoco.includeNoLocationClasses = true
 }
 
-task codeCoverage(type: JacocoReport, dependsOn: [':core:codeCoverage',
+task rootCodeCoverage(type: JacocoReport, dependsOn: [':app:codeCoverage',
+												  ':core:codeCoverage',
 												  ':coreDeps:codeCoverage',
-												  ':coresupport:codeCoverage',
-												  'testDebugUnitTest',
-												  'createDebugCoverageReport']) {
+												  ':coreSupport:codeCoverage']) {
 	group = "Reporting"
 	description = "Generate Jacoco coverage reports for Debug build"
 	
@@ -37,10 +35,10 @@ task codeCoverage(type: JacocoReport, dependsOn: [':core:codeCoverage',
 	]
 	// generated classes
 	classDirectories = fileTree(
-		dir: "${buildDir}/intermediates/classes/debug",
+		dir: "${rootProject.rootDir}/app/build/intermediates/classes/debug",
 		excludes: excludes
 	) + fileTree(
-		dir: "${buildDir}/tmp/kotlin-classes/debug",
+		dir: "${rootProject.rootDir}/app/build/tmp/kotlin-classes/debug",
 		excludes: excludes
 	) + fileTree(
 		dir: "${rootProject.rootDir}/core/build/classes",
@@ -49,19 +47,19 @@ task codeCoverage(type: JacocoReport, dependsOn: [':core:codeCoverage',
 		dir: "${rootProject.rootDir}/coreDeps/build/classes",
 		excludes: excludes
 	) + fileTree(
-		dir: "${rootProject.rootDir}/coresupport/build/intermediates/classes/debug",
+		dir: "${rootProject.rootDir}/coreSupport/build/intermediates/classes/debug",
 		excludes: excludes
 	) + fileTree(
-		dir: "${rootProject.rootDir}/coresupport/build/tmp/kotlin-classes/debug",
+		dir: "${rootProject.rootDir}/coreSupport/build/tmp/kotlin-classes/debug",
 		excludes: excludes
 	)
 	
 	// sources
 	def coverageSourceDirs = [
-		android.sourceSets.main.java.srcDirs,
+		"$rootProject.rootDir/app/src/main",
 		"$rootProject.rootDir/core/src/main",
 		"$rootProject.rootDir/coreDeps/src/main",
-		"$rootProject.rootDir/coresupport/src/main"
+		"$rootProject.rootDir/coreSupport/src/main"
 	]
 	additionalSourceDirs = files(coverageSourceDirs)
 	sourceDirectories = files(coverageSourceDirs)
