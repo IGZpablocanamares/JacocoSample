@@ -10,4 +10,8 @@ public class Core {
 		System.out.println("doAnotherStuff");
 	}
 	
+	public void dontDoNothingWithoutTest() {
+		System.out.println("dontDoNothingWithoutTest");
+	}
+	
 }

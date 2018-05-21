@@ -9,11 +9,7 @@ tasks.withType(Test) {
 	jacoco.includeNoLocationClasses = true
 }
 
-task clearCodeCoverage(type: Delete) {
-	delete file("${buildDir}/../../report")
-}
-
-task codeCoverage(type: JacocoReport, dependsOn: ['clearCodeCoverage', ':core:test', 'testDebugUnitTest', 'createDebugCoverageReport']) {
+task codeCoverage(type: JacocoReport, dependsOn: [':core:codeCoverage', 'testDebugUnitTest', 'createDebugCoverageReport']) {
 	group = "Reporting"
 	description = "Generate Jacoco coverage reports for Debug build"
 	
@@ -21,7 +17,7 @@ task codeCoverage(type: JacocoReport, dependsOn: ['clearCodeCoverage', ':core:te
 		xml.enabled false
 		csv.enabled false
 		html.enabled = true
-		html.destination file("${buildDir}/../../report")
+		html.destination file("${rootProject.rootDir}/code-coverage")
 	}
 	
 	// what to exclude from coverage report
@@ -37,25 +33,24 @@ task codeCoverage(type: JacocoReport, dependsOn: ['clearCodeCoverage', ':core:te
 	]
 	// generated classes
 	classDirectories = fileTree(
-		dir: "$buildDir/intermediates/classes/debug",
+		dir: "${buildDir}/intermediates/classes/debug",
 		excludes: excludes
 	) + fileTree(
-		dir: "$buildDir/tmp/kotlin-classes/debug",
+		dir: "${buildDir}/tmp/kotlin-classes/debug",
 		excludes: excludes
 	) + fileTree(
-		dir: "$buildDir/../../core/build/classes",
+		dir: "${rootProject.rootDir}/core/build/classes",
 		excludes: excludes
 	)
 	
 	// sources
-	sourceDirectories = files([
+	def coverageSourceDirs = [
 		android.sourceSets.main.java.srcDirs,
 		"src/main/kotlin",
-		"../core/src/main"
-	])
-	executionData = fileTree(dir: project.buildDir, includes: [
-		'jacoco/testDebugUnitTest.exec',
-		'outputs/code-coverage/connected/*coverage.ec',
-		'../../core/build/jacoco/*.exec'
-	])
+		"$rootProject.rootDir/core/src/main"
+	]
+	additionalSourceDirs = files(coverageSourceDirs)
+	sourceDirectories = files(coverageSourceDirs)
+	executionData = fileTree(dir: rootProject.rootDir, includes: ['**/*.exec', '**/*.ec'])
+	
 }

@@ -6,8 +6,21 @@ jacoco {
 	toolVersion = "0.8.1"
 }
 
+jacocoTestReport {
+	reports {
+		xml.enabled false
+		csv.enabled false
+		html.enabled true
+	}
+}
+
+jacocoTestReport.dependsOn = ["test"]
+
+task codeCoverage(dependsOn: ['jacocoTestReport']) {
+}
+
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+	implementation fileTree(dir: 'libs', include: ['*.jar'])
 	implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 	testImplementation 'junit:junit:4.12'
 }
