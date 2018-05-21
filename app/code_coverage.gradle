@@ -9,7 +9,11 @@ tasks.withType(Test) {
 	jacoco.includeNoLocationClasses = true
 }
 
-task codeCoverage(type: JacocoReport, dependsOn: [':core:codeCoverage', 'testDebugUnitTest', 'createDebugCoverageReport']) {
+task codeCoverage(type: JacocoReport, dependsOn: [':core:codeCoverage',
+												  ':coreDeps:codeCoverage',
+												  ':coresupport:codeCoverage',
+												  'testDebugUnitTest',
+												  'createDebugCoverageReport']) {
 	group = "Reporting"
 	description = "Generate Jacoco coverage reports for Debug build"
 	
@@ -41,12 +45,23 @@ task codeCoverage(type: JacocoReport, dependsOn: [':core:codeCoverage', 'testDeb
 	) + fileTree(
 		dir: "${rootProject.rootDir}/core/build/classes",
 		excludes: excludes
+	) + fileTree(
+		dir: "${rootProject.rootDir}/coreDeps/build/classes",
+		excludes: excludes
+	) + fileTree(
+		dir: "${rootProject.rootDir}/coresupport/build/intermediates/classes/debug",
+		excludes: excludes
+	) + fileTree(
+		dir: "${rootProject.rootDir}/coresupport/build/tmp/kotlin-classes/debug",
+		excludes: excludes
 	)
 	
 	// sources
 	def coverageSourceDirs = [
 		android.sourceSets.main.java.srcDirs,
-		"$rootProject.rootDir/core/src/main"
+		"$rootProject.rootDir/core/src/main",
+		"$rootProject.rootDir/coreDeps/src/main",
+		"$rootProject.rootDir/coresupport/src/main"
 	]
 	additionalSourceDirs = files(coverageSourceDirs)
 	sourceDirectories = files(coverageSourceDirs)
