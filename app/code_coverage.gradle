@@ -46,7 +46,6 @@ task codeCoverage(type: JacocoReport, dependsOn: [':core:codeCoverage', 'testDeb
 	// sources
 	def coverageSourceDirs = [
 		android.sourceSets.main.java.srcDirs,
-		"src/main/kotlin",
 		"$rootProject.rootDir/core/src/main"
 	]
 	additionalSourceDirs = files(coverageSourceDirs)

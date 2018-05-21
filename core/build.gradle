@@ -14,9 +14,7 @@ jacocoTestReport {
 	}
 }
 
-jacocoTestReport.dependsOn = ["test"]
-
-task codeCoverage(dependsOn: ['jacocoTestReport']) {
+task codeCoverage(dependsOn: ["test", "jacocoTestReport"]) {
 }
 
 dependencies {
