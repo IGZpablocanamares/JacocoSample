@@ -16,4 +16,10 @@ class CoreTest {
         core.doAnotherStuff()
     }
     
+    @Test
+    fun doDomainCoreStuff() {
+        val core = Core()
+        core.doDomainStuff()
+    }
+    
 }
