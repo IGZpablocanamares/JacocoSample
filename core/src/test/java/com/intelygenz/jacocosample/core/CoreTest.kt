@@ -22,4 +22,13 @@ class CoreTest {
         core.doDomainStuff()
     }
     
+    @Test
+    fun doAnotherCoolStuff() {
+        val coreTestSupport = CoreTestSupport()
+        coreTestSupport.doCoreTestSupport()
+        val core = Core()
+        core.doDomainStuff()
+    }
+    
+    
 }
